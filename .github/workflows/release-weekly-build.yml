@@ -1,0 +1,40 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch'
+        required: true
+        default: 'master'
+      tag:
+        description: 'Release Tag'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+        id: go
+
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Build binaries
+        run: make cross
+
+      - name: Ship it
+        if: ${{ github.event.inputs.tag != '' }} # don't release if no tag is specified
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./bin/*"
+          prerelease: true
+          draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.event.inputs.tag }}
