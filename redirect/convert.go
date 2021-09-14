@@ -42,7 +42,7 @@ func Convert(args []string) []string {
 			// docker cli has deprecated -h to avoid ambiguity with -H, while docker-compose still support it
 			arg = "--help"
 		}
-		if arg == "--version" {
+		if arg == "--version" || arg == "-v" {
 			// redirect --version pseudo-command to actual command
 			arg = "version"
 		}
