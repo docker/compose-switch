@@ -35,6 +35,3 @@ jobs:
 
       - name: Test
         run: make test
-
-      - name: e2e
-        run: make bin e2e

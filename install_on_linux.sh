@@ -1,21 +1,13 @@
 #!/bin/sh
 
-COMPOSE_SWITCH_VERSION="1.0.0"
-COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/$COMPOSE_SWITCH_VERSION/docker-compose"
-DOCKER_COMPOSE_V1_PATH_ORIG="$(which docker-compose)"
-DOCKER_COMPOSE_V1_PATH_NEW="$DOCKER_COMPOSE_V1_PATH_ORIG-v1"
+set -e
 
-if [ ! -f "${DOCKER_COMPOSE_V1_PATH_ORIG}" ]; then
-  echo "'docker-compose' V1 could not be found in PATH. Aborting..."
-  exit 1
-fi
-
-if [ -f "${DOCKER_COMPOSE_V1_PATH_NEW}" ]; then
-  echo "Looks like docker-compose V1->V2 switch is already installed. 'docker-compose' binary was already moved to '${DOCKER_COMPOSE_V1_PATH_NEW}'."
-  echo "If you are trying to re-enable Docker Compose V2, please run:"
-  echo "$ docker-compose enable-v2"
-  exit 0
-fi
+ARCHITECTURE=amd64
+if [ "$(uname -m)" = "aarch64" ]; then
+  ARCHITECTURE=arm64
+fi  
+COMPOSE_SWITCH_VERSION="v1.0.1"
+COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/${COMPOSE_SWITCH_VERSION}/docker-compose-linux-${ARCHITECTURE}"
 
 error=$(docker compose version 2>&1 >/dev/null)
 if [ $? -ne 0 ]; then
@@ -23,19 +15,27 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-TMP_FILE=$(mktemp)
-echo "Downloading compose V1->V2 switch into $TMP_FILE..."
-curl -L -o "$TMP_FILE" "$COMPOSE_SWITCH_URL"
-chmod +x "$TMP_FILE"
+curl -fL $COMPOSE_SWITCH_URL -o /usr/local/bin/compose-switch
+chmod +x /usr/local/bin/compose-switch
 
-echo "Switching Docker Compose binary"
-mv "$DOCKER_COMPOSE_V1_PATH_ORIG" "$DOCKER_COMPOSE_V1_PATH_NEW"
-mv "$TMP_FILE" "$DOCKER_COMPOSE_V1_PATH_ORIG"
+COMPOSE=$(command -v docker-compose)
+if [ "$COMPOSE" = /usr/local/bin/docker-compose ]; then
+  # This is a manual installation of docker-compose
+  # so, safe for us to rename binary
+  mv /usr/local/bin/docker-compose /usr/local/bin/docker-compose-v1
+  COMPOSE=/usr/local/bin/docker-compose-v1
+fi
 
-echo "Compose V1->V2 installed"
+ALTERNATIVES="update-alternatives"
+if ! command -v $ALTERNATIVES; then
+  ALTERNATIVES=alternatives
+fi  
 
-$DOCKER_COMPOSE_V1_PATH_ORIG enable-v2
-echo "Docker Compose V2 enabled"
-docker-compose version
+echo "Configuring `docker-compose` alternatives"
+if [ ! -z $COMPOSE ]; then
+  $ALTERNATIVES --install /usr/local/bin/docker-compose docker-compose $COMPOSE 1
+fi  
+$ALTERNATIVES --install /usr/local/bin/docker-compose docker-compose /usr/local/bin/compose-switch 99
 
-echo "To switch back to Compose V1, you can run: `docker-compose disable-v2`"
+echo "'docker-compose' is now set to run Compose V2"
+echo "use '$ALTERNATIVES --config docker-compose' if you want to switch back to Compose V1"
