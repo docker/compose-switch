@@ -58,6 +58,11 @@ func Test_convert(t *testing.T) {
 			args: []string{"psql", "-h", "postgres"},
 			want: []string{"compose", "psql", "-h", "postgres"}, // -h should not be converted to --help
 		},
+		{
+			name: "issues/8648",
+			args: []string{"exec", "mongo", "mongo", "--host", "mongo"},
+			want: []string{"compose", "exec", "mongo", "mongo", "--host", "mongo"}, // --host is passed to exec
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
