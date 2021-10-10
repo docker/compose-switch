@@ -2,7 +2,6 @@
 
 set -e
 
-
 ARCHITECTURE=amd64
 if [ "$(uname -m)" = "aarch64" ]; then
   ARCHITECTURE=arm64
@@ -11,7 +10,6 @@ COMPOSE_SWITCH_VERSION="v1.0.2"
 COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/${COMPOSE_SWITCH_VERSION}/docker-compose-linux-${ARCHITECTURE}"
 
 error=$(docker compose version 2>&1 >/dev/null)
-echo "After error"
 if [ $? -ne 0 ]; then
   echo "Docker Compose V2 is not installed"
   exit 1
