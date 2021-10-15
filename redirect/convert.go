@@ -9,8 +9,6 @@ var (
 	boolflags = []string{
 		"--debug", "-D",
 		"--verbose",
-		"--log-level",
-		"--l",
 		"--tls",
 		"--tlsverivy",
 	}
@@ -20,6 +18,7 @@ var (
 		"--tlscert",
 		"--tlskey",
 		"--host", "-H",
+		"--log-level", "-l",
 		"--context",
 	}
 )

@@ -63,6 +63,12 @@ func Test_convert(t *testing.T) {
 			args: []string{"exec", "mongo", "mongo", "--host", "mongo"},
 			want: []string{"compose", "exec", "mongo", "mongo", "--host", "mongo"}, // --host is passed to exec
 		},
+		{
+			name: "issues/12",
+			args: []string{"--log-level", "INFO", "up"},
+			want: []string{"--log-level", "INFO", "up"},
+		},
+
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
