@@ -66,7 +66,7 @@ func Test_convert(t *testing.T) {
 		{
 			name: "issues/12",
 			args: []string{"--log-level", "INFO", "up"},
-			want: []string{"--log-level", "INFO", "up"},
+			want: []string{"--log-level", "INFO", "compose", "up"},
 		},
 
 	}
