@@ -12,7 +12,7 @@ var (
 		"--log-level",
 		"--l",
 		"--tls",
-		"--tlsverivy",
+		"--tlsverify",
 	}
 
 	stringflags = []string{
