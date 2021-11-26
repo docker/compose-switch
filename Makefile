@@ -5,6 +5,7 @@ endif
 
 all: bin
 
+PKG_NAME := github.com/docker/compose-switch
 LDFLAGS="-s -w -X $(PKG_NAME)/internal.Version=${GIT_TAG}"
 
 bin:
@@ -15,7 +16,7 @@ cross:
 	CGO_ENABLED=0 GOOS=linux   GOARCH=arm64 go build -ldflags=$(LDFLAGS) -o bin/docker-compose-linux-arm64 .
 
 test:
-	go test -cover $(shell go list  $(TAGS) ./... | grep -vE 'e2e')
+	go test -cover ./...
 
 test-ubuntu-install:
 	docker build -f ubuntu-test.Dockerfile .
