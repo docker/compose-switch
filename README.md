@@ -15,7 +15,7 @@ $ curl -fL https://raw.githubusercontent.com/docker/compose-cli/main/scripts/ins
 
 1. download compose-switch binary for your architecture
 ```console
-$ curl -fL https://github.com/docker/compose-switch/releases/download/v1.0.1/docker-compose-linux-amd64 -o /usr/local/bin/compose-switch
+$ curl -fL https://github.com/docker/compose-switch/releases/download/v1.0.2/docker-compose-linux-amd64 -o /usr/local/bin/compose-switch
 ```
 2. make compose-switch executable
 ```console
