@@ -31,44 +31,43 @@ func Test_convert(t *testing.T) {
 		{
 			name: "compose only",
 			args: []string{"up"},
-			want: []string{"compose", "up"},
+			want: []string{"compose", "--compatibility", "up"},
 		},
 		{
 			name: "with context",
 			args: []string{"--context", "foo", "-f", "compose.yaml", "up"},
-			want: []string{"--context", "foo", "compose", "-f", "compose.yaml", "up"},
+			want: []string{"--context", "foo", "compose", "--compatibility", "-f", "compose.yaml", "up"},
 		},
 		{
 			name: "with host",
 			args: []string{"--host", "tcp://1.2.3.4", "up"},
-			want: []string{"--host", "tcp://1.2.3.4", "compose", "up"},
+			want: []string{"--host", "tcp://1.2.3.4", "compose", "--compatibility", "up"},
 		},
 		{
 			name: "compose --version",
 			args: []string{"--version"},
-			want: []string{"compose", "version"},
+			want: []string{"compose", "--compatibility", "version"},
 		},
 		{
 			name: "help",
 			args: []string{"-h"},
-			want: []string{"compose", "--help"},
+			want: []string{"compose", "--compatibility", "--help"},
 		},
 		{
 			name: "issues/1962",
 			args: []string{"psql", "-h", "postgres"},
-			want: []string{"compose", "psql", "-h", "postgres"}, // -h should not be converted to --help
+			want: []string{"compose", "--compatibility", "psql", "-h", "postgres"}, // -h should not be converted to --help
 		},
 		{
 			name: "issues/8648",
 			args: []string{"exec", "mongo", "mongo", "--host", "mongo"},
-			want: []string{"compose", "exec", "mongo", "mongo", "--host", "mongo"}, // --host is passed to exec
+			want: []string{"compose", "--compatibility", "exec", "mongo", "mongo", "--host", "mongo"}, // --host is passed to exec
 		},
 		{
 			name: "issues/12",
 			args: []string{"--log-level", "INFO", "up"},
-			want: []string{"--log-level", "INFO", "compose", "up"},
+			want: []string{"--log-level", "INFO", "compose", "--compatibility", "up"},
 		},
-
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
