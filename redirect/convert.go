@@ -24,8 +24,8 @@ var (
 )
 
 func Convert(args []string) []string {
-	rootFlags := []string{}
-	command := []string{"compose"}
+	var rootFlags []string
+	command := []string{"compose", "--compatibility"}
 	l := len(args)
 	for i := 0; i < l; i++ {
 		arg := args[i]
