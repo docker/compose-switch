@@ -31,7 +31,7 @@ if ! command -v $ALTERNATIVES; then
   ALTERNATIVES=alternatives
 fi  
 
-echo "Configuring `docker-compose` alternatives"
+echo "Configuring 'docker-compose' alternatives"
 if [ ! -z $COMPOSE ]; then
   $ALTERNATIVES --install /usr/local/bin/docker-compose docker-compose $COMPOSE 1
 fi  
