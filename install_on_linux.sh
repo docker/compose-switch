@@ -18,7 +18,7 @@ fi
 curl -fL $COMPOSE_SWITCH_URL -o /usr/local/bin/compose-switch
 chmod +x /usr/local/bin/compose-switch
 
-COMPOSE=$(command -v docker-compose)
+COMPOSE=$(command -v docker-compose || true)
 if [ "$COMPOSE" = /usr/local/bin/docker-compose ]; then
   # This is a manual installation of docker-compose
   # so, safe for us to rename binary
