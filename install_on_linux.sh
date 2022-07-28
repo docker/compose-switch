@@ -6,16 +6,15 @@ ARCHITECTURE=amd64
 if [ "$(uname -m)" = "aarch64" ]; then
   ARCHITECTURE=arm64
 fi  
-COMPOSE_SWITCH_VERSION=$(curl -sI https://github.com/docker/compose-switch/releases/latest | grep '^location:' | sed 's,.*/,,')
+COMPOSE_SWITCH_VERSION=$(curl -sI https://github.com/docker/compose-switch/releases/latest | grep '^location:' | sed 's,.*/,,' | tr -d '\r')
 COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/${COMPOSE_SWITCH_VERSION}/docker-compose-linux-${ARCHITECTURE}"
 
-error=$(docker compose version 2>&1 >/dev/null)
-if [ $? -ne 0 ]; then
+if ! docker compose version >/dev/null 2>&1; then
   echo "Docker Compose V2 is not installed"
   exit 1
 fi
 
-curl -fL $COMPOSE_SWITCH_URL -o /usr/local/bin/compose-switch
+curl -fL "$COMPOSE_SWITCH_URL" -o /usr/local/bin/compose-switch
 chmod +x /usr/local/bin/compose-switch
 
 COMPOSE=$(command -v docker-compose)
@@ -31,8 +30,8 @@ if ! command -v $ALTERNATIVES; then
   ALTERNATIVES=alternatives
 fi  
 
-echo "Configuring `docker-compose` alternatives"
-if [ ! -z $COMPOSE ]; then
+echo "Configuring docker-compose alternatives"
+if [ -n "$COMPOSE" ]; then
   $ALTERNATIVES --install /usr/local/bin/docker-compose docker-compose $COMPOSE 1
 fi  
 $ALTERNATIVES --install /usr/local/bin/docker-compose docker-compose /usr/local/bin/compose-switch 99
