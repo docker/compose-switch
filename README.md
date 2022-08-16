@@ -5,7 +5,7 @@ Compose Switch is a replacement to the Compose V1 `docker-compose` (python) exec
 
 ## installation
 
-We provide an script for automated installation:
+We provide a script for automated installation:
 
 ```console
 $ curl -fL https://raw.githubusercontent.com/docker/compose-switch/master/install_on_linux.sh | sh
@@ -21,11 +21,11 @@ $ curl -fL https://github.com/docker/compose-switch/releases/latest/download/doc
 ```console
 $ chmod +x /usr/local/bin/compose-switch
 ```
-3. rename `docker-compose` binary if you already have it installed as `/usr/local/bin/docker-compose` 
+3. rename `docker-compose` binary if you already have it installed as `/usr/local/bin/docker-compose`
 ```console
 $ mv /usr/local/bin/docker-compose /usr/local/bin/docker-compose-v1
 ```
-4. define an "alternatives" group for `docker-compose` command: 
+4. define an "alternatives" group for `docker-compose` command
 ```console
 $ update-alternatives --install /usr/local/bin/docker-compose docker-compose <PATH_TO_DOCKER_COMPOSE_V1> 1
 $ update-alternatives --install /usr/local/bin/docker-compose docker-compose /usr/local/bin/compose-switch 99
