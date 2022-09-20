@@ -5,6 +5,8 @@ set -e
 ARCHITECTURE=amd64
 if [ "$(uname -m)" = "aarch64" ]; then
   ARCHITECTURE=arm64
+elif [ "$(uname -m)" = "x86_64" ]; then
+  ARCHITECTURE=amd64
 fi  
 COMPOSE_SWITCH_VERSION=$(curl -sI https://github.com/docker/compose-switch/releases/latest | grep '^location:' | sed 's,.*/,,' | tr -d '\r')
 COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/${COMPOSE_SWITCH_VERSION}/docker-compose-linux-${ARCHITECTURE}"
