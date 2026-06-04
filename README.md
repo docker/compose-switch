@@ -57,3 +57,16 @@ There are 2 choices for the alternative docker-compose (providing /usr/local/bin
 
 Press <enter> to keep the current choice[*], or type selection number: 
 ```
+
+### Manual installation without docker-compose v1
+
+If you do not have or do not plan to have docker-compose v1 installed, you can also install `compose-switch` directly as the `docker-compose` executable:
+
+1. download compose-switch binary for your architecture as docker-compose
+```console
+$ curl -fL https://github.com/docker/compose-switch/releases/latest/download/docker-compose-linux-amd64 -o /usr/local/bin/docker-compose
+```
+2. make compose-switch as docker-compose executable
+```console
+$ chmod +x /usr/local/bin/docker-compose
+```
